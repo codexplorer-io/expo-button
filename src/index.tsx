@@ -188,7 +188,7 @@ export const Button: React.FC<ButtonProps> = ({
             activeOpacity={activeOpacity}
             {...restProps}
         >
-            <View style={styles.innerRow}>
+            <View style={[styles.innerRow]}>
                 {hasLeftIcon && renderedIcon}
                 {title ? (
                     <Text style={[styles.text, sizeStyles.text, variantStyles.text, textStyle]}>
@@ -205,7 +205,6 @@ export const Button: React.FC<ButtonProps> = ({
 
 const styles = StyleSheet.create({
     container: {
-        flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -213,7 +212,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        flex: 1,
         gap: 8,
     },
     text: {
