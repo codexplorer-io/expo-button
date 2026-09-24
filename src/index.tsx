@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+    View,
     TouchableOpacity,
     Text,
     StyleSheet,
@@ -167,19 +168,11 @@ export const Button: React.FC<ButtonProps> = ({
 
     const variantStyles = getVariantStyle();
     const sizeStyles = getSizeStyle();
-
     const iconSize = getIconSize(size);
     const iconColor = (variantStyles.text.color as string) || theme.primary;
-
     const renderedIcon = icon?.({ size: iconSize, color: iconColor }) ?? null;
-
-    const content = title ? (
-        <Text style={[styles.text, sizeStyles.text, variantStyles.text, textStyle]}>
-            {title}
-        </Text>
-    ) : (
-        children
-    );
+    const hasLeftIcon = Boolean(renderedIcon && iconPosition === IconPosition.Left);
+    const hasRightIcon = Boolean(renderedIcon && iconPosition === IconPosition.Right);
 
     return (
         <TouchableOpacity
@@ -195,9 +188,17 @@ export const Button: React.FC<ButtonProps> = ({
             activeOpacity={activeOpacity}
             {...restProps}
         >
-            {renderedIcon && iconPosition === IconPosition.Left && renderedIcon}
-            {content}
-            {renderedIcon && iconPosition === IconPosition.Right && renderedIcon}
+            <View style={styles.innerRow}>
+                {hasLeftIcon && renderedIcon}
+                {title ? (
+                    <Text style={[styles.text, sizeStyles.text, variantStyles.text, textStyle]}>
+                        {title}
+                    </Text>
+                ) : (
+                    children
+                )}
+                {hasRightIcon && renderedIcon}
+            </View>
         </TouchableOpacity>
     );
 };
@@ -207,7 +208,13 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: 12,
+    },
+    innerRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
+        gap: 8,
     },
     text: {
         fontWeight: 'bold',
