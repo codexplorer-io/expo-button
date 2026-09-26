@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
 | `title` | `string` | — | Text label for the button |
+| `subtitle` | `string` | — | Secondary subtitle text displayed below the title |
 | `children` | `ReactNode` | — | Custom content if `title` is not provided |
 | `variant` | `ButtonVariant` | `ButtonVariant.Secondary` | Visual button style variant |
 | `size` | `ButtonSize` | `ButtonSize.Large` | Button dimension and typography preset |
@@ -103,6 +104,7 @@ const styles = StyleSheet.create({
 | `onPress` | `() => void` | — | Click / tap handler |
 | `style` | `StyleProp<ViewStyle>` | — | Outer container style override |
 | `textStyle` | `StyleProp<TextStyle>` | — | Text style override |
+| `subtitleStyle` | `StyleProp<TextStyle>` | — | Subtitle text style override |
 | `activeOpacity` | `number` | `0.7` | Opacity on press |
 
 ## License

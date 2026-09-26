@@ -36,6 +36,7 @@ export interface IconProps {
 
 export interface ButtonProps extends Omit<TouchableOpacityProps, 'style'> {
     title?: string;
+    subtitle?: string;
     children?: React.ReactNode;
     variant?: ButtonVariant;
     size?: ButtonSize;
@@ -43,12 +44,14 @@ export interface ButtonProps extends Omit<TouchableOpacityProps, 'style'> {
     iconPosition?: IconPosition;
     style?: StyleProp<ViewStyle>;
     textStyle?: StyleProp<TextStyle>;
+    subtitleStyle?: StyleProp<TextStyle>;
     disabled?: boolean;
     onPress?: () => void;
 }
 
 export const Button: React.FC<ButtonProps> = ({
     title,
+    subtitle,
     children,
     variant = ButtonVariant.Secondary,
     size = ButtonSize.Large,
@@ -56,6 +59,7 @@ export const Button: React.FC<ButtonProps> = ({
     iconPosition = IconPosition.Left,
     style,
     textStyle,
+    subtitleStyle,
     disabled = false,
     onPress,
     activeOpacity = 0.7,
@@ -63,7 +67,7 @@ export const Button: React.FC<ButtonProps> = ({
 }) => {
     const theme = useAppTheme();
 
-    const getVariantStyle = (): { container: ViewStyle; text: TextStyle } => {
+    const getVariantStyle = (): { container: ViewStyle; text: TextStyle; subtitle: TextStyle } => {
         switch (variant) {
             case ButtonVariant.Primary:
                 return {
@@ -72,6 +76,10 @@ export const Button: React.FC<ButtonProps> = ({
                     },
                     text: {
                         color: theme.background,
+                    },
+                    subtitle: {
+                        color: theme.background,
+                        opacity: 0.85,
                     }
                 };
             case ButtonVariant.Secondary:
@@ -81,6 +89,10 @@ export const Button: React.FC<ButtonProps> = ({
                     },
                     text: {
                         color: theme.primary,
+                    },
+                    subtitle: {
+                        color: theme.primary,
+                        opacity: 0.8,
                     }
                 };
             case ButtonVariant.Outline:
@@ -92,6 +104,10 @@ export const Button: React.FC<ButtonProps> = ({
                     },
                     text: {
                         color: theme.primary,
+                    },
+                    subtitle: {
+                        color: theme.primary,
+                        opacity: 0.8,
                     }
                 };
             case ButtonVariant.Ghost:
@@ -101,6 +117,10 @@ export const Button: React.FC<ButtonProps> = ({
                     },
                     text: {
                         color: theme.primary,
+                    },
+                    subtitle: {
+                        color: theme.primary,
+                        opacity: 0.8,
                     }
                 };
             default:
@@ -110,45 +130,64 @@ export const Button: React.FC<ButtonProps> = ({
                     },
                     text: {
                         color: theme.primary,
+                    },
+                    subtitle: {
+                        color: theme.primary,
+                        opacity: 0.8,
                     }
                 };
         }
     };
 
-    const getSizeStyle = (): { container: ViewStyle; text: TextStyle } => {
+    const getSizeStyle = (): { container: ViewStyle; text: TextStyle; subtitle: TextStyle } => {
         switch (size) {
             case ButtonSize.Small:
                 return {
                     container: {
-                        height: 40,
+                        minHeight: 40,
                         borderRadius: 8,
                         paddingHorizontal: 16,
+                        paddingVertical: 4,
                     },
                     text: {
                         fontSize: 14,
+                    },
+                    subtitle: {
+                        fontSize: 11,
+                        lineHeight: 14,
                     }
                 };
             case ButtonSize.Medium:
                 return {
                     container: {
-                        height: 52,
+                        minHeight: 52,
                         borderRadius: 12,
                         paddingHorizontal: 20,
+                        paddingVertical: 6,
                     },
                     text: {
                         fontSize: 16,
+                    },
+                    subtitle: {
+                        fontSize: 12,
+                        lineHeight: 16,
                     }
                 };
             case ButtonSize.Large:
             default:
                 return {
                     container: {
-                        height: 64,
+                        minHeight: 64,
                         borderRadius: 16,
                         paddingHorizontal: 24,
+                        paddingVertical: 8,
                     },
                     text: {
                         fontSize: 18,
+                    },
+                    subtitle: {
+                        fontSize: 13,
+                        lineHeight: 17,
                     }
                 };
         }
@@ -191,9 +230,16 @@ export const Button: React.FC<ButtonProps> = ({
             <View style={[styles.innerRow]}>
                 {hasLeftIcon && renderedIcon}
                 {title ? (
-                    <Text style={[styles.text, sizeStyles.text, variantStyles.text, textStyle]}>
-                        {title}
-                    </Text>
+                    <View style={styles.textContainer}>
+                        <Text style={[styles.text, sizeStyles.text, variantStyles.text, textStyle]}>
+                            {title}
+                        </Text>
+                        {!!subtitle && (
+                            <Text style={[styles.subtitle, sizeStyles.subtitle, variantStyles.subtitle, subtitleStyle]}>
+                                {subtitle}
+                            </Text>
+                        )}
+                    </View>
                 ) : (
                     children
                 )}
@@ -214,9 +260,18 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         gap: 8,
     },
+    textContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     text: {
         fontWeight: 'bold',
         textAlign: 'center',
+    },
+    subtitle: {
+        fontWeight: 'normal',
+        textAlign: 'center',
+        marginTop: 2,
     },
     disabled: {
         opacity: 0.5,
