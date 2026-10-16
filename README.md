@@ -1,17 +1,31 @@
 # `@codexporer.io/expo-button`
 
-A customizable, theme-aware button component for React Native and Expo applications with multiple design variants, sizing options, icon placements, and dynamic color integration.
+A customizable, theme-aware button component for React Native and Expo applications with multiple design variants, sizing options, icon placements, and dynamic color integration via `@codexporer.io/expo-app-theme`.
 
-## Installation & Peer Dependencies
+---
+
+## Peer Dependencies
+
+All peer dependencies must be installed in consuming projects:
+- `react`: `*`
+- `react-native`: `*`
+- `@codexporer.io/expo-app-theme`: `*`
+
+---
+
+## Installation
 
 ```bash
 yarn add @codexporer.io/expo-button
 ```
 
-Peer dependencies:
-- `react` (`*`)
-- `react-native` (`*`)
-- `@codexporer.io/expo-app-theme` (`*`)
+---
+
+## Theme Requirement
+
+`Button` calls `useAppTheme()` internally to resolve colors (`theme.primary`, `theme.surfaceSecondary`, `theme.background`). The consuming application must mount `<ThemeProvider>` from `@codexporer.io/expo-app-theme` higher in the component tree, or an error will be thrown.
+
+---
 
 ## Quick Start
 
@@ -76,36 +90,58 @@ const styles = StyleSheet.create({
 });
 ```
 
+---
+
 ## Variants & Sizes
 
 ### `ButtonVariant`
-- `ButtonVariant.Primary` — Solid primary branding background (`theme.primary`) with contrasting text.
-- `ButtonVariant.Secondary` — Subtle secondary background (`theme.surfaceSecondary`) with primary colored text.
-- `ButtonVariant.Outline` — Transparent background with 2px primary border.
-- `ButtonVariant.Ghost` — Transparent background with primary text (borderless).
+- `ButtonVariant.Primary` (`'primary'`) — Background: `theme.primary`, Text: `theme.background`, Subtitle: `theme.background` (85% opacity).
+- `ButtonVariant.Secondary` (`'secondary'`, default) — Background: `theme.surfaceSecondary`, Text: `theme.primary`, Subtitle: `theme.primary` (80% opacity).
+- `ButtonVariant.Outline` (`'outline'`) — Background: `transparent`, Border: 2px `theme.primary`, Text: `theme.primary`, Subtitle: `theme.primary` (80% opacity).
+- `ButtonVariant.Ghost` (`'ghost'`) — Background: `transparent`, Text: `theme.primary`, Subtitle: `theme.primary` (80% opacity).
 
 ### `ButtonSize`
-- `ButtonSize.Small` — Height 40px, font size 14px, icon size 18px.
-- `ButtonSize.Medium` — Height 52px, font size 16px, icon size 22px.
-- `ButtonSize.Large` — Height 64px, font size 18px, icon size 24px (default).
+| Size | `minHeight` | `borderRadius` | `paddingHorizontal` | `paddingVertical` | `fontSize` | Subtitle `fontSize` / `lineHeight` | Icon `size` |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| `ButtonSize.Small` (`'small'`) | 40 | 8 | 16 | 4 | 14 | 11 / 14 | 18 |
+| `ButtonSize.Medium` (`'medium'`) | 52 | 12 | 20 | 6 | 16 | 12 / 16 | 22 |
+| `ButtonSize.Large` (`'large'`, default) | 64 | 16 | 24 | 8 | 18 | 13 / 17 | 24 |
+
+### `IconPosition`
+- `IconPosition.Left` (`'left'`, default) — Places icon before label.
+- `IconPosition.Right` (`'right'`) — Places icon after label.
+
+---
 
 ## Props Reference
+
+`ButtonProps` extends `Omit<TouchableOpacityProps, 'style'>`:
 
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
 | `title` | `string` | — | Text label for the button |
 | `subtitle` | `string` | — | Secondary subtitle text displayed below the title |
-| `children` | `ReactNode` | — | Custom content if `title` is not provided |
+| `children` | `React.ReactNode` | — | Custom content rendered when `title` is not provided |
 | `variant` | `ButtonVariant` | `ButtonVariant.Secondary` | Visual button style variant |
 | `size` | `ButtonSize` | `ButtonSize.Large` | Button dimension and typography preset |
-| `icon` | `(props: IconProps) => ReactNode` | — | Render callback providing calculated `size` and `color` |
-| `iconPosition` | `IconPosition` | `IconPosition.Left` | `'left'` or `'right'` |
-| `disabled` | `boolean` | `false` | Disables touch interaction and reduces opacity to 0.5 |
-| `onPress` | `() => void` | — | Click / tap handler |
+| `icon` | `(props: IconProps) => React.ReactNode` | — | Render callback receiving `{ size, color }` |
+| `iconPosition` | `IconPosition` | `IconPosition.Left` | Placement of the icon (`Left` or `Right`) |
+| `disabled` | `boolean` | `false` | Disables interaction and reduces opacity to 0.5 |
+| `onPress` | `() => void` | — | Press callback handler |
+| `activeOpacity` | `number` | `0.7` | Opacity on press (inherited from `TouchableOpacityProps`) |
 | `style` | `StyleProp<ViewStyle>` | — | Outer container style override |
-| `textStyle` | `StyleProp<TextStyle>` | — | Text style override |
+| `textStyle` | `StyleProp<TextStyle>` | — | Title text style override |
 | `subtitleStyle` | `StyleProp<TextStyle>` | — | Subtitle text style override |
-| `activeOpacity` | `number` | `0.7` | Opacity on press |
+
+### `IconProps`
+```typescript
+export interface IconProps {
+  size: number;
+  color: string;
+}
+```
+
+---
 
 ## License
 
